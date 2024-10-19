@@ -4,30 +4,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Resistance Calculator</title>
     <style>
         body {
             background-color: rgb(36, 35, 35);
             color: white;
             font-family: monospace;
+            margin: 0;
+            padding: 0;
         }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            text-decoration: underline;
+        }
+
+        p {
+            text-align: center;
+            color: gray;
+            margin: 0 0 20px 0;
+        }
+
         .resistance {
             margin: auto;
-            margin-top: 50px;
+            margin-top: 5vh;
             border: 3px solid white;
-            height: 200px;
+            height: 25vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 1000px;
+            max-width: 1000px;
+            width: 90%;
             border-radius: 50px;
             background-color: rgb(237, 203, 79);
         }
+
         .color-codes {
             border: 2px solid rgb(230, 190, 70);
-            height: 200px;
-            width: 100px;
-            margin-inline: 30px;
+            height: 80%;
+            width: 15%;
+            margin-inline: 2%;
             font-size: larger;
             font-weight: bold;
             align-items: center;
@@ -39,50 +56,60 @@
             color: black;
             transition: color 0.3s;
         }
+
         .result {
             margin: auto;
-            margin-top: 50px;
-            width: 500px;
+            margin-top: 5vh;
+            width: 90%;
+            max-width: 500px;
             text-align: center;
             font-size: 20px;
             background-color: rgb(30, 30, 30);
-            padding: 50px;
+            padding: 30px;
+            border-radius: 10px;
         }
-        p {
-            margin: auto;
-            margin-top: 0px;
-            width: 500px;
-            display: flex;
-            justify-content: center;
-            padding: 5px;
-            color: gray;
-        }
-        h1 {
-            margin: auto;
-            margin-top: 20px;
-            width: 500px;
-            display: flex;
-            justify-content: center;
-            text-decoration: underline;
-        }
+
         .colors {
-            width: 600px;
+            width: 90%;
+            max-width: 600px;
             height: 100px;
             display: flex;
             justify-content: space-around;
             align-items: center;
-            margin:auto;
+            margin: auto;
         }
 
         .color {
-            opacity:0.7;
+            opacity: 0.7;
             width: 50px;
             height: 40px;
             border: 1px solid black;
-            color:black;
+            color: black;
             font-size: larger;
             font-weight: bold;
             padding-left: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (max-width: 600px) {
+            .resistance {
+                height: 30vh;
+            }
+
+            .color-codes {
+                width: 18%;
+                height: 90%;
+            }
+
+            .result {
+                padding: 20px;
+            }
+
+            .colors {
+                height: 80px;
+            }
         }
     </style>
 </head>
@@ -141,9 +168,9 @@
                 currentColorIndex = (currentColorIndex + 1) % colors.length;
                 const newColor = colors[currentColorIndex].color;
                 this.style.backgroundColor = newColor;
-                this.style.borderColor = newColor; 
+                this.style.borderColor = newColor;
                 this.setAttribute('data-value', colors[currentColorIndex].value);
-                
+
                 if (newColor === 'orange' || newColor === 'yellow' || newColor === 'white' || newColor === 'violet' || newColor === 'rgb(230, 190, 70)' || newColor === 'silver' || newColor === 'gold') {
                     this.style.color = 'black';
                 } else {
