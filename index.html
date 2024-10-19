@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: rgb(36, 35, 35);
+            color: white;
+            font-family: monospace;
+        }
+        .resistance {
+            margin: auto;
+            margin-top: 50px;
+            border: 3px solid white;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 1000px;
+            border-radius: 50px;
+            background-color: rgb(237, 203, 79);
+        }
+        .color-codes {
+            border: 2px solid rgb(230, 190, 70);
+            height: 200px;
+            width: 100px;
+            margin-inline: 30px;
+            font-size: larger;
+            font-weight: bold;
+            align-items: center;
+            background-color: rgb(230, 190, 70);
+            display: flex;
+            justify-content: center;
+            padding-top: 5px;
+            cursor: pointer;
+            color: black;
+            transition: color 0.3s;
+        }
+        .result {
+            margin: auto;
+            margin-top: 50px;
+            width: 500px;
+            text-align: center;
+            font-size: 20px;
+            background-color: rgb(30, 30, 30);
+            padding: 50px;
+        }
+        p {
+            margin: auto;
+            margin-top: 0px;
+            width: 500px;
+            display: flex;
+            justify-content: center;
+            padding: 5px;
+            color: gray;
+        }
+        h1 {
+            margin: auto;
+            margin-top: 20px;
+            width: 500px;
+            display: flex;
+            justify-content: center;
+            text-decoration: underline;
+        }
+        .colors {
+            width: 600px;
+            height: 100px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin:auto;
+        }
+
+        .color {
+            opacity:0.7;
+            width: 50px;
+            height: 40px;
+            border: 1px solid black;
+            color:black;
+            font-size: larger;
+            font-weight: bold;
+            padding-left: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Resistance Calculator</h1>
+    <p>Resistance nikl nahi rahi or placement chahiye. &#x1F480;</p>
+    <div class="resistance">
+        <div id="band_1" class="color-codes">Band 1</div>
+        <div id="band_2" class="color-codes">Band 2</div>
+        <div id="band_3" class="color-codes">Band 3</div>
+        <div id="multiplier" class="color-codes">Multiplier</div>
+        <div id="tolerance" class="color-codes">Tolerance</div>
+    </div>
+    <p>Note: If there are 4 bands, leave band-3 empty.</p>
+    <div class="result" id="resultDisplay">Resistance Value: </div>
+    <div class="colors">
+        <div class="color" style="background-color:black;color:gray">0</div>
+        <div class="color" style="background-color:brown">1</div>
+        <div class="color" style="background-color:red">2</div>
+        <div class="color" style="background-color:orange">3</div>
+        <div class="color" style="background-color:yellow">4</div>
+        <div class="color" style="background-color:green">5</div>
+        <div class="color" style="background-color:blue">6</div>
+        <div class="color" style="background-color:violet">7</div>
+        <div class="color" style="background-color:gray">8</div>
+        <div class="color" style="background-color:white">9</div>
+        <div class="color" style="background-color:silver">10</div>
+        <div class="color" style="background-color:gold">11</div>
+    </div>
+    <script>
+        const band_colors = [
+            { color: 'rgb(230, 190, 70)', value: -1 },
+            { color: 'black', value: 0 },
+            { color: 'brown', value: 1 },
+            { color: 'red', value: 2 },
+            { color: 'orange', value: 3 },
+            { color: 'yellow', value: 4 },
+            { color: 'green', value: 5 },
+            { color: 'blue', value: 6 },
+            { color: 'violet', value: 7 },
+            { color: 'gray', value: 8 },
+            { color: 'white', value: 9 }
+        ];
+        const tolerance_colors = [
+            { color: 'rgb(230, 190, 70)', value: -1 },
+            { color: 'silver', value: 10 },
+            { color: 'gold', value: 5 }
+        ];
+
+        document.querySelectorAll('.color-codes').forEach(div => {
+            let currentColorIndex = 0;
+            const colors = div.id === "tolerance" ? tolerance_colors : band_colors;
+
+            div.addEventListener('click', function () {
+                currentColorIndex = (currentColorIndex + 1) % colors.length;
+                const newColor = colors[currentColorIndex].color;
+                this.style.backgroundColor = newColor;
+                this.style.borderColor = newColor; 
+                this.setAttribute('data-value', colors[currentColorIndex].value);
+                
+                if (newColor === 'orange' || newColor === 'yellow' || newColor === 'white' || newColor === 'violet' || newColor === 'rgb(230, 190, 70)' || newColor === 'silver' || newColor === 'gold') {
+                    this.style.color = 'black';
+                } else {
+                    this.style.color = 'white';
+                }
+
+                calculateResistance();
+            });
+        });
+
+        function calculateResistance() {
+            const band1Value = parseInt(document.getElementById("band_1").getAttribute('data-value'));
+            const band2Value = parseInt(document.getElementById("band_2").getAttribute('data-value'));
+            const band3Value = parseInt(document.getElementById("band_3").getAttribute('data-value'));
+            const multiplierValue = parseInt(document.getElementById("multiplier").getAttribute('data-value'));
+            const toleranceValue = parseInt(document.getElementById("tolerance").getAttribute('data-value'));
+
+            const digits = [band1Value, band2Value, band3Value].filter(val => val !== -1);
+            if (digits.length === 0 || multiplierValue === -1) {
+                document.getElementById("resultDisplay").textContent = "Resistance Value: Invalid selection";
+                return;
+            }
+
+            const number = parseInt(digits.join(''));
+            const resistance = number * Math.pow(10, multiplierValue);
+            let toleranceText = "";
+
+            if (toleranceValue === 5) {
+                toleranceText = " ±5%";
+            } else if (toleranceValue === 10) {
+                toleranceText = " ±10%";
+            }
+
+            let formattedResistance;
+            if (resistance >= 1000000) {
+                formattedResistance = (resistance / 1000000).toFixed(2) + " MΩ";
+            } else if (resistance >= 1000) {
+                formattedResistance = (resistance / 1000).toFixed(2) + " kΩ";
+            } else {
+                formattedResistance = resistance + " Ω";
+            }
+
+            document.getElementById("resultDisplay").textContent = `Resistance Value: ${formattedResistance}${toleranceText}`;
+        }
+    </script>
+</body>
+
+</html>
